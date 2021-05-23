@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using LessonMonitor.API.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -12,17 +13,22 @@ namespace LessonMonitor.API.Controllers
     public class QuestionsController : ControllerBase
 
     {
-        private Question[] _questions;
+        private List<Question> _questions;
 
-        public QuestionsController(Question[] questions)
+        public QuestionsController()
         {
-            _questions = questions;
+            _questions = new List<Question>
+            {
+                new Question("question1", "Михаил Кодер", new DateTime(2021, 2, 13, 15, 30, 25)),
+                new Question("question2", "Михаил Кодер", new DateTime(2021, 2, 13, 15, 45, 25)),
+                new Question("question3", "SHILY", new DateTime(2021, 2, 13, 16, 30, 25))
+            };
         }
 
         [HttpGet]
-        public IActionResult Get(Member member)
+        public IActionResult Get(string memberName)
         {
-            var result = _questions.Where(x => x.MemberName == member.Name)
+            var result = _questions.Where(x => x.MemberName == memberName)
                 .ToArray();
             return Ok(result);
         }
